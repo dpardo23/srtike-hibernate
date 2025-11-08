@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <!-- Define el nombre de nuestra "unidad de persistencia".
+         Usaremos este nombre ("strike-pu") en nuestro código Java. -->
+    <persistence-unit name="strike-pu" transaction-type="RESOURCE_LOCAL">
+
+        <!-- Le dice a JPA qué implementación estamos usando (Hibernate) -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- Le dice a Hibernate que busque automáticamente cualquier clase
+             con la anotación @Entity, para no tener que listarlas
+             una por una. ¡Muy útil! -->
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+
+        <properties>
+            <!-- ======================================== -->
+            <!-- Configuración de la Conexión a PostgreSQL -->
+            <!-- ======================================== -->
+            <!-- Driver JDBC de PostgreSQL -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+
+            <!-- URL de tu base de datos (asumiendo que está en localhost) -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/strike"/>
+
+            <!-- Tu usuario de PostgreSQL -->
+            <property name="jakarta.persistence.jdbc.user" value="dpardo"/>
+
+            <!-- Tu contraseña de PostgreSQL -->
+            <property name="jakarta.persistence.jdbc.password" value="dpardo23"/>
+
+            <!-- ======================================== -->
+            <!-- Propiedades Específicas de Hibernate    -->
+            <!-- ======================================== -->
+
+            <!-- El "dialecto" que usa Hibernate para "hablar" PostgreSQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+
+            <!-- (Opcional) Muestra el SQL en la consola. MUY útil para debugging. -->
+            <property name="hibernate.show_sql" value="true"/>
+
+            <!-- (Opcional) Formatea el SQL en la consola para que sea legible. -->
+            <property name="hibernate.format_sql" value="true"/>
+
+            <!-- ¡IMPORTANTE! Generación automática del Schema (Tablas)
+                 "update": Hibernate intentará crear o modificar las tablas
+                 automáticamente para que coincidan con tus clases @Entity.
+                 Esto elimina la necesidad de tus triggers de inserción.
+                 Otras opciones: "create" (borra todo y crea), "validate", "none". -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+
+    </persistence-unit>
+</persistence>

@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dpardo
+      POSTGRES_PASSWORD: dpardo23
+      POSTGRES_DB: strike
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - postgres_net
+
+volumes:
+  pgdata:
+
+networks:
+  postgres_net:
+    driver: bridge
