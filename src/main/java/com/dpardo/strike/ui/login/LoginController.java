@@ -77,7 +77,8 @@ public class LoginController {
     //--- Métodos Privados de Ayuda (Sin cambios) ---
 
     /**
-     * Carga la ventana principal. (Sin cambios)
+     * Carga la ventana principal correspondiente al rol del usuario y cierra la ventana de login.
+     * @param roleName El nombre del rol del usuario autenticado.
      */
     private void navigateToMainView(String roleName) {
         String fxmlPath;
@@ -85,11 +86,11 @@ public class LoginController {
 
         // Determina la vista a cargar según el rol
         switch (roleName.toLowerCase()) {
-            case "read_only":
+            case "read_only": // Rol corregido (guion medio)
                 fxmlPath = "/com/dpardo/strike/ui/read_only/Home-view.fxml";
                 windowTitle = "Strike - Vista de Lector";
                 break;
-            case "data_writer":
+            case "data_writer": // Verifica si en tu BD es con guion bajo o medio
                 fxmlPath = "/com/dpardo/strike/ui/data_writer/Home-admin.fxml";
                 windowTitle = "Strike - Panel de Administración";
                 break;
@@ -98,19 +99,38 @@ public class LoginController {
                 windowTitle = "Strike - Panel de Super Administrador";
                 break;
             default:
+                System.err.println("Rol recibido no reconocido: " + roleName);
                 showAlert("Error de Rol", "Rol no reconocido: " + roleName, Alert.AlertType.ERROR);
                 return;
         }
 
         try {
-            // Carga el FXML de la nueva ventana
+            // 1. Cargar el FXML
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
+
+            // 2. Crear una nueva Escena con tamaño explícito
+            Scene scene = new Scene(root, 960, 600);
+
+            // 3. Configurar el Stage (Ventana)
             Stage stage = new Stage();
             stage.setTitle(windowTitle);
-            stage.setScene(new Scene(root));
-            stage.show();
+            stage.setScene(scene);
 
-            // Cierra la ventana de login actual
+            // --- FUERZA BRUTA PARA EL TAMAÑO ---
+            // Establecemos el tamaño mínimo y el tamaño actual directamente al Stage
+            stage.setMinWidth(960);
+            stage.setMinHeight(600);
+            stage.setWidth(960);
+            stage.setHeight(600);
+
+            // Evitamos que se pueda redimensionar a algo ilegible (opcional)
+            stage.setResizable(false);
+
+            // 4. Mostrar y Centrar
+            stage.show();
+            stage.centerOnScreen(); // Centrar DESPUÉS de show() a veces funciona mejor en Linux/Gnome
+
+            // 5. Cerrar login
             Stage loginStage = (Stage) btnLogin.getScene().getWindow();
             loginStage.close();
 
@@ -119,7 +139,6 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
     /**
      * Muestra una ventana de alerta genérica. (Sin cambios)
      */

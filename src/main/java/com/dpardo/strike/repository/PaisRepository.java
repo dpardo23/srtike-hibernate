@@ -1,14 +1,15 @@
 package com.dpardo.strike.repository;
 
 import com.dpardo.strike.domain.PaisComboItem;
+// Importamos la Entidad explícitamente
 import com.dpardo.strike.entity.Pais;
 import com.dpardo.strike.util.HibernateUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.TypedQuery;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors; // <--- Importante para la conversión
 
 /**
  * Repositorio para la entidad Pais.
@@ -16,10 +17,21 @@ import java.util.List;
  */
 public class PaisRepository {
 
-    public List<Pais> obtenerTodosLosPaises() {
+    /**
+     * Obtiene una lista completa de todos los países.
+     * CORREGIDO: Convierte de 'Entity' a 'Domain' para evitar el error de tipos.
+     * @return Una lista de objetos com.dpardo.strike.domain.Pais
+     */
+    public List<com.dpardo.strike.domain.Pais> obtenerTodosLosPaises() {
         try (EntityManager em = HibernateUtil.getEntityManager()) {
-            // Usamos JPQL para traer todos los objetos Pais
-            return em.createQuery("SELECT p FROM Pais p ORDER BY p.nombre", Pais.class).getResultList();
+            // 1. Obtenemos las ENTIDADES de la base de datos
+            List<Pais> entidades = em.createQuery("SELECT p FROM Pais p ORDER BY p.nombre", Pais.class).getResultList();
+
+            // 2. Las convertimos a OBJETOS DE DOMINIO (Records) que es lo que pide el Controller
+            return entidades.stream()
+                    .map(p -> new com.dpardo.strike.domain.Pais(p.getNombre(), p.getCodFifa()))
+                    .collect(Collectors.toList());
+
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -44,7 +56,7 @@ public class PaisRepository {
         try {
             tx = em.getTransaction();
             tx.begin();
-            HibernateUtil.setAuditUser(em); // <--- Auditoría
+            HibernateUtil.setAuditUser(em); // Auditoría
 
             Pais pais = new Pais();
             pais.setCodFifa(codFifa);
@@ -77,13 +89,13 @@ public class PaisRepository {
         try {
             tx = em.getTransaction();
             tx.begin();
-            HibernateUtil.setAuditUser(em); // <--- Auditoría
+            HibernateUtil.setAuditUser(em); // Auditoría
 
             Pais pais = em.find(Pais.class, codFifa);
             if (pais == null) {
                 throw new Exception("No se encontró el país con código: " + codFifa);
             }
-            pais.setNombre(nuevoNombre); // Hibernate detecta el cambio y hace UPDATE al commit
+            pais.setNombre(nuevoNombre);
 
             tx.commit();
         } catch (Exception e) {
@@ -100,7 +112,7 @@ public class PaisRepository {
         try {
             tx = em.getTransaction();
             tx.begin();
-            HibernateUtil.setAuditUser(em); // <--- Auditoría
+            HibernateUtil.setAuditUser(em); // Auditoría
 
             Pais pais = em.find(Pais.class, codFifa);
             if (pais != null) {
