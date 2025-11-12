@@ -203,15 +203,9 @@ public class SuperAdminController {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
             Stage stage = new Stage();
             stage.setTitle(title);
-            stage.setScene(new Scene(root));
-
-            root.setOpacity(0.0);
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), root);
-            fadeIn.setFromValue(0.0);
-            fadeIn.setToValue(1.0);
-
+            // Añade las dimensiones 960x600 (o las que prefieras)
+            stage.setScene(new Scene(root, 960, 600)); // <-- ARREGLADO
             stage.show();
-            fadeIn.play();
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }

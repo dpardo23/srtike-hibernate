@@ -50,7 +50,7 @@
                  automáticamente para que coincidan con tus clases @Entity.
                  Esto elimina la necesidad de tus triggers de inserción.
                  Otras opciones: "create" (borra todo y crea), "validate", "none". -->
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
         </properties>
 
     </persistence-unit>

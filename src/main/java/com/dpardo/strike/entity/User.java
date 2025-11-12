@@ -21,7 +21,8 @@ public class User {
     private String nombreUsuario;
 
     /** Mapea 'public.dominio_email', lo aplanamos a String. Es NULLEABLE. */
-    @Column(name = "email", length = 100) // Longitud segura para un email
+    // Le decimos a Hibernate que el tipo nativo de la columna es "dominio_email"
+    @Column(name = "email", columnDefinition = "dominio_email")
     private String email;
 
     /** Mapea el tipo 'text' de PostgreSQL. */

@@ -65,7 +65,7 @@ public class Jugador {
      * Es NULLEABLE.
      */
     @Lob
-    @Column(name = "foto")
+    @Column(name = "foto", columnDefinition = "bytea")
     private byte[] foto;
 
     /**

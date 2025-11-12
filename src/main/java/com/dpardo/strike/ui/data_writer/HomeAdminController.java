@@ -165,7 +165,8 @@ public class HomeAdminController {
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(fxmlPath)));
             Stage stage = new Stage();
             stage.setTitle(title);
-            stage.setScene(new Scene(root));
+            // Añade las dimensiones 960x600 (o las que prefieras)
+            stage.setScene(new Scene(root, 960, 600)); // <-- ARREGLADO
             stage.show();
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();

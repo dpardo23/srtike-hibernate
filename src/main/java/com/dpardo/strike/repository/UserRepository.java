@@ -50,10 +50,14 @@ public class UserRepository {
             // NOTA: El orden de los índices [0], [1], etc., debe coincidir
             // exactamente con las columnas que devuelve tu función.
             // id_usuario_out, pid_out, client_address_out, client_port_out, rol_nombre_out
+            // Obtenemos la dirección IP como un Objeto
+            Object ipAddressObject = result[2];
+            // Lo convertimos a String de forma segura
+            String clientAddress = (ipAddressObject != null) ? ipAddressObject.toString() : null;
             SessionInfo sessionInfo = new SessionInfo(
                     (Integer) result[0],  // id_usuario_out
                     (Integer) result[1],  // pid_out
-                    (String) result[2],   // client_address_out
+                    result[2].toString(), // client_address_out
                     (Integer) result[3],  // client_port_out
                     (String) result[4]    // rol_nombre_out
             );
