@@ -45,7 +45,6 @@ public class LoginController {
 
         if (sessionInfo != null && sessionInfo.roleName() != null) {
             SessionManager.setCurrentSession(sessionInfo);
-            // --- CORRECCIÓN DE LOG ---
             System.out.println("Login exitoso. Usuario: " + username + ", Rol: " + sessionInfo.roleName());
             navigateToMainView(sessionInfo.roleName());
         } else {
@@ -57,7 +56,6 @@ public class LoginController {
         String fxmlPath;
         String windowTitle = "strike"; // Título unificado
 
-        // --- CORRECCIÓN DE CASE: Usamos guion bajo como en tu BD ---
         switch (roleName.toLowerCase()) {
             case "read_only":
                 fxmlPath = "/com/dpardo/strike/ui/read_only/Home-view.fxml";

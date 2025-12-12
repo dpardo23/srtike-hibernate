@@ -41,8 +41,6 @@ public class UserRepository {
             TypedQuery<Object[]> query = em.createQuery(jpql, Object[].class);
             query.setParameter("username", username);
 
-            // --- INICIO DE LA CORRECCIÓN DE LÓGICA ---
-
             // Usamos getResultList() en lugar de getSingleResult()
             List<Object[]> results = query.getResultList();
 
